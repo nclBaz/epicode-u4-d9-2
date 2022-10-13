@@ -16,6 +16,7 @@ import fs from "fs" // CORE MODULE (package that doesn't need to be installed)
 import { fileURLToPath } from "url" // CORE MODULE
 import { dirname, join } from "path" // CORE MODULE
 import uniqid from "uniqid" // 3RD PARTY MODULE
+import { sendRegistrationEmail } from "../../lib/email-tools.js"
 
 // ************************************** HOW TO GET users.json PATH ******************************
 
@@ -130,6 +131,19 @@ usersRouter.delete("/:userId", (request, response) => {
   // 4. Send back a proper response
 
   response.status(204).send()
+})
+
+usersRouter.post("/register", async (req, res, next) => {
+  try {
+    // 1. Receive user's data from req.body
+    const { email } = req.body
+    // 2. Save new user in db
+    // 3. Send email to new user
+    await sendRegistrationEmail(email)
+    res.send()
+  } catch (error) {
+    next(error)
+  }
 })
 
 export default usersRouter // Please do not forget this!
