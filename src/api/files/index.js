@@ -3,6 +3,7 @@ import multer from "multer"
 import { extname } from "path"
 import { v2 as cloudinary } from "cloudinary"
 import { CloudinaryStorage } from "multer-storage-cloudinary"
+import fs from "fs-extra"
 import json2csv from "json2csv"
 import {
   getBooks,
@@ -11,7 +12,8 @@ import {
 } from "../../lib/fs-tools.js"
 import { pipeline } from "stream"
 import { createGzip } from "zlib"
-import { getPDFReadableStream } from "../../lib/pdf-tools.js"
+import { generatePDFAsync, getPDFReadableStream } from "../../lib/pdf-tools.js"
+import { readFile } from "fs"
 
 const filesRouter = express.Router()
 
@@ -130,6 +132,21 @@ filesRouter.get("/booksCSV", (req, res, next) => {
     pipeline(source, transform, destination, err => {
       if (err) console.log(err)
     })
+  } catch (error) {
+    next(error)
+  }
+})
+
+filesRouter.get("/asyncPDF", async (req, res, next) => {
+  try {
+    const books = await getBooks()
+
+    await generatePDFAsync(books[0])
+
+    // DO SOMETHING WITH THAT FILE BECAUSE WE ARE 100% SURE THAT STREAM IS DONE AT THIS POINT
+
+    // SOMETHING LIKE SEND AN EMAIL WITH THAT FILE AS ATTACHMENT
+    res.send()
   } catch (error) {
     next(error)
   }
