@@ -1,0 +1,15 @@
+[
+  {
+    "firstName": "Nazami",
+    "avatar": "https://res.cloudinary.com/riccardostrive/image/upload/v1665485414/fs0322/users/p6ndqppkuvmyxunulhle.gif",
+    "createdAt": "2022-10-05T10:02:51.387Z",
+    "id": "36k8a8w0l8vgogor",
+    "updatedAt": "2022-10-05T10:50:12.257Z"
+  },
+  {
+    "firstName": "Miles",
+    "avatar": "/public/img/users/magic.gif",
+    "createdAt": "2022-10-05T10:38:52.594Z",
+    "id": "36k8a6icl8vhysac"
+  }
+]
