@@ -3,6 +3,7 @@ import multer from "multer"
 import { extname } from "path"
 import { v2 as cloudinary } from "cloudinary"
 import { CloudinaryStorage } from "multer-storage-cloudinary"
+import json2csv from "json2csv"
 import {
   getBooks,
   getBooksJSONReadableStream,
@@ -108,6 +109,25 @@ filesRouter.get("/pdf", async (req, res, next) => {
     const destination = res
 
     pipeline(source, destination, err => {
+      if (err) console.log(err)
+    })
+  } catch (error) {
+    next(error)
+  }
+})
+
+filesRouter.get("/booksCSV", (req, res, next) => {
+  try {
+    // SOURCE (Readable Stream on books.json) --> TRANSFORM (json into a csv) --> DESTINATION (response)
+
+    res.setHeader("Content-Disposition", "attachment; filename=books.csv")
+    const source = getBooksJSONReadableStream()
+    const transform = new json2csv.Transform({
+      fields: ["asin", "title", "category"],
+    })
+    const destination = res
+
+    pipeline(source, transform, destination, err => {
       if (err) console.log(err)
     })
   } catch (error) {
